@@ -25,6 +25,8 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import {WebView} from 'react-native-webview';
+
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
@@ -62,37 +64,34 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const html: string = `
+  <html>
+    <head></head>
+    <body>
+    <iframe 
+      width="560" height="315" src="https://www.youtube.com/embed/P0qOt4LwmVc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+    </iframe>
+<br>
+    <iframe
+      loading="lazy"
+      width="560" height="315" 
+      src="https://www.youtube.com/embed/P0qOt4LwmVc"
+      title="YouTube video player"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
+    </iframe>
+    </body>
+  </html>
+`;
+
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+    <View style={styles.Container}>
+      <WebView
+        style={styles.WebViewStyle}
+        source={{html: html}}
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            1Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -112,6 +111,12 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  Container: {
+    flex: 1,
+  },
+  WebViewStyle: {
+    margin: 20,
   },
 });
 
