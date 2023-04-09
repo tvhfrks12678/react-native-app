@@ -5,118 +5,92 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, {useRef, useState} from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
   View,
+  SafeAreaView,
+  Button,
+  Text,
+  Platform,
 } from 'react-native';
+import WebView, {WebViewMessageEvent} from 'react-native-webview';
+import {buildHTML} from './iFrame';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const App = () => {
+  const webRef = useRef<WebView>(null);
+  const [time, setTime] = useState('00:00');
 
-import {WebView} from 'react-native-webview';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const playVideo = () => {
+    webRef.current?.injectJavaScript('play()');
   };
 
-  const html: string = `
-  <html>
-    <head></head>
-    <body>
-    <iframe 
-      width="560" height="315" src="https://www.youtube.com/embed/P0qOt4LwmVc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-    </iframe>
-<br>
-    <iframe
-      loading="lazy"
-      width="560" height="315" 
-      src="https://www.youtube.com/embed/P0qOt4LwmVc"
-      title="YouTube video player"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
-    </iframe>
-    </body>
-  </html>
-`;
+  const pauseVideo = () => {
+    webRef.current?.injectJavaScript('pause()');
+  };
+
+  const restartVideo = () => {
+    webRef.current?.injectJavaScript('seekTo(0)');
+  };
+
+  const onMessageRecieved = (message: WebViewMessageEvent) => {
+    const responseJSON = JSON.parse(message.nativeEvent.data);
+    const minutes = Math.round(responseJSON.currentDuration / 60);
+    const seconds = Math.round(responseJSON.currentDuration % 60);
+    const minutesText = minutes < 10 ? `0${minutes}` : minutes;
+    const secondsText = seconds < 10 ? `0${seconds}` : seconds;
+    setTime(`${minutesText}:${secondsText}`);
+  };
 
   return (
-    <View style={styles.Container}>
-      <WebView
-        style={styles.WebViewStyle}
-        source={{html: html}}
-        javaScriptEnabled={true}
-        domStorageEnabled={true}
-      />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.videoContainer}>
+        <WebView
+          ref={webRef}
+          source={{html: buildHTML('hQJeGBYI3C8')}}
+          allowsFullscreenVideo={false}
+          allowsInlineMediaPlayback
+          scalesPageToFit={false}
+          onMessage={onMessageRecieved}
+          mediaPlaybackRequiresUserAction={false}
+        />
+      </View>
+      <View style={styles.buttonRow}>
+        <Button title="Play" onPress={playVideo} />
+        <Button title="Pause" onPress={pauseVideo} />
+        <Button title="Restart" onPress={restartVideo} />
+      </View>
+      <View style={styles.textContainer}>
+        <Text style={styles.timeLabel}>{time}</Text>
+      </View>
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    ...StyleSheet.absoluteFillObject,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  videoContainer: {
+    height: 250,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  buttonContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-around',
   },
-  highlight: {
-    fontWeight: '700',
+  buttonRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
-  Container: {
-    flex: 1,
+  textContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  WebViewStyle: {
-    margin: 20,
+  timeLabel: {
+    fontWeight: 'bold',
+    fontSize: 30,
   },
 });
 
