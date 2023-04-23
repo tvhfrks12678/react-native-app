@@ -6,9 +6,15 @@
  */
 
 import React, {useState, useCallback, useRef} from 'react';
-import {Button, View, Alert} from 'react-native';
+import {Button, View, Alert, Text, SafeAreaView} from 'react-native';
 // import YouTube from 'react-native-youtube';
 import YoutubePlayer from 'react-native-youtube-iframe';
+import FlatlistSelectable from './features/learns/components/FlatlistSelectable';
+import FlatListSimpleTest from './features/learns/components/FlatListSimpleTest';
+import HeaderScrollableTabView from './features/learns/components/HeaderScrollableTabView';
+import PullRefreshTabView from './features/learns/components/PullRefreshTabView';
+import TabViewSimple from './features/learns/components/TabViewSimple';
+import Basics from './features/learns/interpolate/Basics';
 
 export default function App() {
   // const [playing, setPlaying] = useState(false);
@@ -18,15 +24,15 @@ export default function App() {
   // }, []);
 
   return (
-    <View>
-      {/* <YouTube
-        videoId="KVZ-P-ZI6W4" // The YouTube video ID
-        apiKey="YOUR_YOUTUBE_DEVELOPER_API_KEY_FOR_ANDROID"
-        play // control playback of video with true/false
-        fullscreen // control whether the video should play in fullscreen or inline
-        loop // control whether the video should loop when ended
-      /> */}
-      <YoutubePlayer height={300} videoId={'s-l8y4Lcc2Q'} />
-    </View>
+    <>
+      <SafeAreaView style={{flex: 1}}>
+        {/* <PullRefreshTabView /> */}
+        {/* <HeaderScrollableTabView /> */}
+        {/* <FlatlistSelectable /> */}
+        {/* <FlatListSimpleTest /> */}
+        {/* <TabViewSimple /> */}
+        <Basics />
+      </SafeAreaView>
+    </>
   );
 }
