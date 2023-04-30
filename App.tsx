@@ -16,6 +16,7 @@ import PullRefreshTabView from './features/learns/components/PullRefreshTabView'
 import TabViewSimple from './features/learns/components/TabViewSimple';
 import Page from './features/learns/context/Page';
 import Basics from './features/learns/interpolate/Basics';
+import TabViewExample from './features/learns/tabView/TabViewExample';
 
 export default function App() {
   // const [playing, setPlaying] = useState(false);
@@ -31,9 +32,10 @@ export default function App() {
         {/* <HeaderScrollableTabView /> */}
         {/* <FlatlistSelectable /> */}
         {/* <FlatListSimpleTest /> */}
-        {/* <TabViewSimple /> */}
+        <TabViewSimple />
         {/* <Basics /> */}
-        <Page />
+        {/* <Page /> */}
+        {/* <TabViewExample /> */}
       </SafeAreaView>
     </>
   );
