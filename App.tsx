@@ -14,6 +14,7 @@ import FlatListSimpleTest from './features/learns/components/FlatListSimpleTest'
 import HeaderScrollableTabView from './features/learns/components/HeaderScrollableTabView';
 import PullRefreshTabView from './features/learns/components/PullRefreshTabView';
 import TabViewSimple from './features/learns/components/TabViewSimple';
+import Page from './features/learns/context/Page';
 import Basics from './features/learns/interpolate/Basics';
 
 export default function App() {
@@ -31,7 +32,8 @@ export default function App() {
         {/* <FlatlistSelectable /> */}
         {/* <FlatListSimpleTest /> */}
         {/* <TabViewSimple /> */}
-        <Basics />
+        {/* <Basics /> */}
+        <Page />
       </SafeAreaView>
     </>
   );
